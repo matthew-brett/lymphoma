@@ -1,0 +1,108 @@
+---
+title: "Curing cancer?"
+output:
+  pdf_document: default
+  html_notebook: default
+  html_document: default
+---
+
+At the time I wrote this, you can find the following on the [Wikipedia page for
+Burkitt's
+Lymphoma](https://en.wikipedia.org/wiki/Burkitt%27s_lymphoma#Prognosis).
+
+> The overall cure rate for Burkitt's lymphoma in developed countries is
+> about 90%, but worse in low-income countries. Burkitt's lymphoma is
+> uncommon in adults, where it has a worse prognosis (Molyneux et al 2012).
+>
+> In 2006, treatment with dose-adjusted EPOCH with Rituximab showed
+> promising initial results in a small series of patients (n=17), with
+> a 100% response rate, and 100% overall survival and progression-free
+> survival at 28 months (median follow-up) (Dunleavy et al 2006).
+
+* Molyneux *et al* (2012). Burkitt's Lymphoma.  The Lancet, 379(9822),
+  1234-1244.
+* Dunleavy *et al* (2006). Novel Treatment of Burkitt Lymphoma with
+  Dose-Adjusted EPOCH-Rituximab: Preliminary Results Showing Excellent Outcome.
+  Blood, 108(11), 2736–2736.
+
+How likely is it that the Dunleavy 2006 study results, or better, could have
+come about by chance?
+
+Let's do a simulation with some random numbers.
+
+Here is one one random number between 1 and 10 (inclusive):
+
+```{r}
+patient1 <- sample(1:10, 1)
+patient1
+```
+
+I can use that to simulate one patient in the trial, with a 90% (default) rate
+of cure.  I say that 1 through 9 mean that the patient is cured, and 10 means
+that the patient was not cured.
+
+I can ask R to tell me whether this patient is cured (TRUE) or not (FALSE):
+
+```{r}
+patient1 < 10
+```
+
+Now I ask for 17 patients, the same number as in the trial.
+
+```{r}
+patients <- sample(1:10, 17, replace=TRUE)
+patients
+```
+
+Which were cured?
+
+```{r}
+cured <- patients < 10
+cured
+```
+
+How many were cured? (Count the number of TRUE values)
+
+```{r}
+n_cured = sum(cured)
+n_cured
+```
+
+In this simulation, I find that `r n_cured` patients were cured, in this world,
+where each patient has a 90% chance of being cured.
+
+Now we use a small amount of programming to repeat this simulation 10000 times:
+
+```{r}
+n_cured_per_trial <- numeric(10000)
+for (i in 1:10000) {
+  # We repeat everthing inside the curly brackets
+  # You'll recognize the logic for a single trial here.
+  patients <- sample(1:10, 17, replace=TRUE)
+  cured <- patients < 10
+  n_cured <- sum(cured)
+  # Store the result.
+  n_cured_per_trial[i] <- n_cured
+}
+```
+
+What spread do we get in these simulated numbers of patients?
+
+```{r}
+hist(n_cured_per_trial)
+```
+
+What's the chance that I'll see all 17 patients being cured, in this simulated
+world?
+
+```{r}
+# TRUE if number was 17, FALSE otherwise.
+all_17 <- n_cured_per_trial == 17
+# How many TRUEs?
+n_all_17 <- sum(all_17)
+# What proportion of TRUEs?
+p_all_17 <- n_all_17 / 10000
+# Show the result.
+p_all_17
+```
+
