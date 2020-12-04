@@ -106,3 +106,12 @@ p_all_17 <- n_all_17 / 10000
 p_all_17
 ```
 
+## Questions
+
+How convinced are you that the treatment is more effective than average (where
+the average is 90%)?
+
+How likely is it, do you think, that the treatment is less effective than
+average?
+
+How likely is it that the treatment is *always* effective (100%)?
